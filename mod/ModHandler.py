@@ -7,12 +7,23 @@ import os
 
 
 class ReportObject(object):
-	def __init__(self, type, DomainName, SIP, DIP):
-		pass
+	def __init__(self, Type, DomainName, SIP, DIP, Timestamp, Optional):
+		self.Type = Type
+		self.DomainName = DomainName
+		self.SIP = SIP
+		self.DIP = DIP
+		self.Timestamp = Timestamp
+		self.Optional = Optional
 
 class ModHandler(object):
 	def __init__(self, metaQueue, reportQueue):
-		pass
+		self.metaQueue = metaQueue
+		self.reportQueue = reportQueue
 
-	def report(self):
-		reportQueue.put(ReportObject)
+	def get(self):
+		if self.metaQueue.qsize() <=0:
+			return None
+		return self.metaQueue.get()
+
+	def report(self, Type, DomainName, SIP, DIP, Timestamp, Optional=None):
+		self.reportQueue.put(ReportObject(Type, DomainName, SIP, DIP, Timestamp, Optional))
